@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap')
+
+*
+    padding: 0
+    margin: 0
+    box-sizing: border-box
+    font-family: 'Montserrat', sans-serif
+
+.window-game
+    width: 80%
+    height: 100vh
+    border-right: solid 3px black
+    position: relative
+    float: left
+    .score p
+        position: absolute
+        top: 2%
+        &#score-1
+            right: 55%
+        &#score-2
+            left: 55%
+    #game
+        position: absolute
+        top: 50%
+        left: 50%
+        transform: translate(-50%, -50%)
+        border: 1px solid black
+
+.window-settings
+    width: 20%
+    height: 100vh
+    text-align: center
+    float: right
+    #title
+        height: 10%
+        width: 80%
+        margin: 0 auto
+        border-bottom: solid 2px black
+        h1
+            padding-top: 10%
+    #settings
+        height: 80%
+        padding: 40px 0
+        .option
+            width: 90%
+            margin: 0 0 30px 0
+    #footer
+        height: 10%
+        #start-btn
+            width: 80%
+            padding: 10px
+            border-style: none
+            border-radius: 4px
+            color: #fff6e8
+            background-color: hsl(0, 90%, 50%)
+            &:hover
+                cursor: pointer
+                background-color: hsl(0, 90%, 40%)
