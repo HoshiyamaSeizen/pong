@@ -1,26 +1,3 @@
-const updateVal = (name, val) => {
-	document.getElementById(`val-${name}`).innerHTML = val;
-	switch (name) {
-		case 'speed':
-			Game.config.speed = val;
-			break;
-		case 'balls':
-			Game.config.balls = val;
-			break;
-		case 'color1':
-			Game.config.color1 = val;
-			break;
-		case 'color2':
-			Game.config.color2 = val;
-			break;
-		case 'width':
-			Game.config.width = val;
-			break;
-		default:
-			break;
-	}
-};
-
 const Game = {
 	config: {
 		speed: 100,
@@ -37,6 +14,11 @@ const Game = {
 		ballsOut: [],
 		blocks: [],
 	},
+	score: {
+		blocksCount: 0,
+		blocksCount1: 0,
+		blocksCount2: 0,
+	},
 	running: false,
 	widthLimit: 0,
 	scale: 1,
@@ -45,12 +27,7 @@ const Game = {
 const OUTSIDE = 0;
 const INSIDE = 1;
 
-const fillCircle = (ctx, x, y, r) => {
-	ctx.beginPath();
-	ctx.arc(x, y, r, 0, 2 * Math.PI, 0);
-	ctx.fill();
-};
-
+/** Moves ball according to its trajectory */
 const moveBall = (ball) => {
 	if (ball.angle >= 1 && ball.angle <= 3) ball.y -= 1;
 	if (ball.angle >= 5 && ball.angle <= 7) ball.y += 1;
@@ -59,6 +36,12 @@ const moveBall = (ball) => {
 	return ball;
 };
 
+/** Returns random integer in range between max and min */
+const randInt = (min, max) => {
+	return Math.floor(Math.random() * (max - min) + min);
+};
+
+/** Checks for the presence of balls in the block */
 const checkForBalls = (x, y, checkInside) => {
 	scaledBlockSize = Game.config.blockSize * Game.scale;
 	scaledBallRadius = Game.config.ballRadius * Game.scale;
@@ -79,10 +62,7 @@ const checkForBalls = (x, y, checkInside) => {
 	return result;
 };
 
-const randInt = (min, max) => {
-	return Math.floor(Math.random() * (max - min) + min);
-};
-
+/** Initializes ans starts the game */
 const gameInit = () => {
 	// Start
 	Game.running = !Game.running;
@@ -131,7 +111,19 @@ const gameInit = () => {
 		}
 	}
 
-	// Init balls' random position and angle inside
+	// Count the blocks
+	let score1 = document.getElementById('score-1');
+	let score2 = document.getElementById('score-2');
+	Game.score = { blocksCount: 0, blocksCount1: 0, blocksCount2: 0 };
+	Game.score.blocksCount1 = Game.instance.blocks.reduce((prev, blocks) => {
+		Game.score.blocksCount += blocks.length;
+		return prev + blocks.filter((block) => block.color).length;
+	}, 0);
+
+	Game.score.blocksCount2 = Game.score.blocksCount - Game.score.blocksCount1;
+	console.log(Game.score.blocksCount, Game.score.blocksCount1, Game.score.blocksCount2);
+
+	// Init inside balls' random position and angle
 	var limitMin = ((center - alpha) * blockSize + ballRadius) * Game.scale;
 	var limitMax = ((center + alpha + addBlock + 1) * blockSize - ballRadius) * Game.scale;
 	for (i = 0; i < config.balls; i++) {
@@ -142,7 +134,7 @@ const gameInit = () => {
 		};
 	}
 
-	// Init balls' random position and angle outside
+	// Init outside balls' random position and angle
 	limitMin = ((center - alpha) * blockSize - ballRadius) * Game.scale;
 	limitMax = ((center + alpha + addBlock + 1) * blockSize + ballRadius) * Game.scale;
 	for (i = 0; i < config.balls; i++) {
@@ -178,16 +170,21 @@ const gameInit = () => {
 	scaledBallRadius = ballRadius * Game.scale;
 	blocks = Game.instance.blocks;
 
+	/** Handles ball bouncing */
 	const bounce = (blockX, blockY, wallColor, angleChangeFunc, ball) => {
 		if (blocks[blockY][blockX].color == wallColor) {
-			if (!checkForBalls(blockX, blockY, wallColor))
+			if (!checkForBalls(blockX, blockY, wallColor)) {
+				Game.score.blocksCount1 -= !wallColor ? -1 : 1;
+				Game.score.blocksCount2 -= wallColor ? -1 : 1;
 				blocks[blockY][blockX].color = 1 - wallColor;
+			}
 			angleChangeFunc(ball);
 		}
 	};
 
+	/** Update lyfecycle function */
 	const update = () => {
-		// Check for blocks ahead and break it if needed
+		/** Check for blocks ahead and break it if needed */
 		const advance = (ball, inOrOut) => {
 			angleChange = (ball) => {
 				ball.angle = 8 - ball.angle;
@@ -268,6 +265,7 @@ const gameInit = () => {
 		Game.instance.ballsIn.forEach((ball) => (ball = moveBall(ball)));
 	};
 
+	/** Render lyfecycle function */
 	const render = () => {
 		// Clear previous frame
 		ctx.clearRect(0, 0, screenSize, screenSize);
@@ -297,6 +295,14 @@ const gameInit = () => {
 		Game.instance.ballsIn.forEach((ball) =>
 			fillCircle(ctx, ball.x, ball.y, ballRadius * Game.scale)
 		);
+
+		// Draw score
+		score1.innerText = `${Game.score.blocksCount1} (${Math.round(
+			(Game.score.blocksCount1 / Game.score.blocksCount) * 100
+		)}%)`;
+		score2.innerText = `${Game.score.blocksCount2} (${Math.round(
+			(Game.score.blocksCount2 / Game.score.blocksCount) * 100
+		)}%)`;
 	};
 
 	// Start game life cycle
@@ -323,4 +329,35 @@ window.onload = () => {
 window.onresize = () => {
 	Game.running = false;
 	window.onload();
+};
+
+/** Draws a circle of specified center and radius */
+const fillCircle = (ctx, x, y, r) => {
+	ctx.beginPath();
+	ctx.arc(x, y, r, 0, 2 * Math.PI, 0);
+	ctx.fill();
+};
+
+/** Changes config parameters */
+const updateVal = (name, val) => {
+	document.getElementById(`val-${name}`).innerHTML = val;
+	switch (name) {
+		case 'speed':
+			Game.config.speed = val;
+			break;
+		case 'balls':
+			Game.config.balls = val;
+			break;
+		case 'color1':
+			Game.config.color1 = val;
+			break;
+		case 'color2':
+			Game.config.color2 = val;
+			break;
+		case 'width':
+			Game.config.width = val;
+			break;
+		default:
+			break;
+	}
 };
