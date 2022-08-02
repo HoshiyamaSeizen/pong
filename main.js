@@ -318,7 +318,7 @@ window.onload = () => {
 	else minGameScreenWidth = screen.offsetWidth;
 
 	Game.widthLimit = Math.floor((minGameScreenWidth - 100) / Game.config.blockSize);
-	document.getElementById('width-input').setAttribute('max', Game.widthLimit);
+	document.getElementById('width-input').setAttribute('max', Game.widthLimit > 7? Game.widthLimit : 20);
 	if (Game.config.width > Game.widthLimit) updateVal('width', Game.widthLimit);
 };
 
