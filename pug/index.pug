@@ -30,7 +30,7 @@ html(lang="en")
                 input.slider.option(type="range", name="balls", min="1", max="5", value=1, onInput="updateVal(this.name, this.value)")
                 label(for="width") Field width 
                 p#val-width 20
-                input.option#width-input(type="range", name="width", min="7", max="1000", value=20, onInput="updateVal(this.name, this.value)")
+                input.slider.option#width-input(type="range", name="width", min="7", max="1000", value=20, onInput="updateVal(this.name, this.value)")
             #footer
                 button#start-btn(onClick="gameInit()") Start
         script(src="main.js") 

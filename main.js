@@ -65,10 +65,8 @@ const checkForBalls = (x, y, checkInside) => {
 /** Initializes ans starts the game */
 const gameInit = () => {
 	// Start
-	Game.running = !Game.running;
-	if (!Game.running) {
-		return;
-	}
+	document.getElementById('start-btn').innerText = Game.running ? 'Start' : 'Stop';
+	if (!(Game.running = !Game.running)) return;
 
 	var config = Game.config;
 	var blockSize = config.blockSize;
@@ -119,9 +117,7 @@ const gameInit = () => {
 		Game.score.blocksCount += blocks.length;
 		return prev + blocks.filter((block) => block.color).length;
 	}, 0);
-
 	Game.score.blocksCount2 = Game.score.blocksCount - Game.score.blocksCount1;
-	console.log(Game.score.blocksCount, Game.score.blocksCount1, Game.score.blocksCount2);
 
 	// Init inside balls' random position and angle
 	var limitMin = ((center - alpha) * blockSize + ballRadius) * Game.scale;
@@ -327,7 +323,13 @@ window.onload = () => {
 };
 
 window.onresize = () => {
+	stop();
+};
+
+/** Stops the visualization */
+const stop = () => {
 	Game.running = false;
+	document.getElementById('start-btn').innerText = 'Start';
 	window.onload();
 };
 
@@ -346,7 +348,7 @@ const updateVal = (name, val) => {
 			Game.config.speed = val;
 			break;
 		case 'balls':
-			Game.config.balls = val;
+			if (Game.config.balls !== (Game.config.balls = val)) stop();
 			break;
 		case 'color1':
 			Game.config.color1 = val;
@@ -355,7 +357,7 @@ const updateVal = (name, val) => {
 			Game.config.color2 = val;
 			break;
 		case 'width':
-			Game.config.width = val;
+			if (Game.config.width !== (Game.config.width = val)) stop();
 			break;
 		default:
 			break;
