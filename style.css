@@ -173,6 +173,9 @@ body {
     z-index: 10;
     background: #fff;
   }
+  #window-settings #footer {
+    margin-bottom: 20px;
+  }
 
   #window-settings[opened] {
     transform: translateX(0);
