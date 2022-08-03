@@ -313,17 +313,26 @@ const gameInit = () => {
 };
 
 window.onload = () => {
-	screen = document.querySelector('.window-game');
+	screen = document.getElementById('window-game');
 	if (screen.offsetHeight < screen.offsetWidth) minGameScreenWidth = screen.offsetHeight;
 	else minGameScreenWidth = screen.offsetWidth;
 
 	Game.widthLimit = Math.floor((minGameScreenWidth - 100) / Game.config.blockSize);
-	document.getElementById('width-input').setAttribute('max', Game.widthLimit > 7? Game.widthLimit : 20);
+	document
+		.getElementById('width-input')
+		.setAttribute('max', Game.widthLimit > 7 ? Game.widthLimit : 20);
 	if (Game.config.width > Game.widthLimit) updateVal('width', Game.widthLimit);
 };
 
 window.onresize = () => {
 	stop();
+
+	const gameScreen = document.getElementById('game');
+	const screenSize = document.getElementById('window-game').offsetWidth;
+	if (gameScreen.offsetWidth > screenSize) {
+		gameScreen.setAttribute('width', `${screenSize * 0.8}px`);
+		gameScreen.setAttribute('height', `${screenSize * 0.8}px`);
+	}
 };
 
 /** Stops the visualization */
@@ -362,4 +371,12 @@ const updateVal = (name, val) => {
 		default:
 			break;
 	}
+};
+
+let menuOpened = false;
+const toggleMenu = () => {
+	document.getElementById('window-settings').toggleAttribute('opened');
+	const btn = document.getElementById('menu-open');
+	btn.toggleAttribute('opened');
+	btn.innerText = (menuOpened = !menuOpened) ? 'Close' : 'Menu';
 };

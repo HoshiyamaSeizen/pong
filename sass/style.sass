@@ -6,10 +6,12 @@
     box-sizing: border-box
     font-family: 'Montserrat', sans-serif
 
-.window-game
+body
+    overflow: hidden
+
+#window-game
     width: 80%
     height: 100vh
-    border-right: solid 3px black
     position: relative
     float: left
     .score p
@@ -26,11 +28,27 @@
         transform: translate(-50%, -50%)
         border: 1px solid black
 
-.window-settings
+#menu-open
+    visibility: hidden
+    position: absolute
+    top: 0
+    right: 0
+    margin: 10px 20px
+    padding: 10px
+    border: none
+    border-radius: 10px
+    background-color: #efefef
+    transition: background-color 150ms ease-in
+    &:hover, &:active
+        cursor: pointer
+        background-color: #e2e2e2
+
+#window-settings
     width: 20%
     height: 100vh
     text-align: center
     float: right
+    border-left: solid 3px black
     #title
         height: 10%
         width: 80%
@@ -53,6 +71,46 @@
             border-radius: 4px
             color: #fff6e8
             background-color: hsl(0, 90%, 50%)
+            transition: background-color 150ms ease-in
             &:hover
                 cursor: pointer
                 background-color: hsl(0, 90%, 40%)
+
+
+@media screen and (max-height: 620px)
+    #window-settings
+        overflow: auto
+        #title
+            height: 70px
+        #settings
+            height: 500px
+
+@media screen and (max-width: 780px)
+    #menu-open
+        visibility: visible
+        transition: transform 300ms ease-in 
+        z-index: 100  
+    #menu-open[opened]
+        transform: translateX(-300px)
+    #window-settings
+        position: absolute
+        transform: translateX(300px)
+        width: 300px
+        right: 0
+        transition: transform 300ms ease-in, opacity 300ms ease-in
+        opacity: 1
+        z-index: 10
+        background: #fff
+    #window-settings[opened]
+        transform: translateX(0)
+        opacity: 0.9
+
+@media screen and (max-width: 380px)
+    #menu-open
+        margin: 5px 10px
+        padding: 6px 
+    #menu-open[opened]
+        transform: translateX(-150px)
+    #window-settings
+        transform: translateX(150px)
+        width: 150px

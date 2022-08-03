@@ -6,24 +6,27 @@
   font-family: "Montserrat", sans-serif;
 }
 
-.window-game {
+body {
+  overflow: hidden;
+}
+
+#window-game {
   width: 80%;
   height: 100vh;
-  border-right: solid 3px black;
   position: relative;
   float: left;
 }
-.window-game .score p {
+#window-game .score p {
   position: absolute;
   top: 2%;
 }
-.window-game .score p#score-1 {
+#window-game .score p#score-1 {
   right: 55%;
 }
-.window-game .score p#score-2 {
+#window-game .score p#score-2 {
   left: 55%;
 }
-.window-game #game {
+#window-game #game {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -31,43 +34,116 @@
   border: 1px solid black;
 }
 
-.window-settings {
+#menu-open {
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 10px 20px;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  background-color: #efefef;
+  transition: background-color 150ms ease-in;
+}
+#menu-open:hover, #menu-open:active {
+  cursor: pointer;
+  background-color: #e2e2e2;
+}
+
+#window-settings {
   width: 20%;
   height: 100vh;
   text-align: center;
   float: right;
+  border-left: solid 3px black;
 }
-.window-settings #title {
+#window-settings #title {
   height: 10%;
   width: 80%;
   margin: 0 auto;
   border-bottom: solid 2px black;
 }
-.window-settings #title h1 {
+#window-settings #title h1 {
   padding-top: 10%;
 }
-.window-settings #settings {
+#window-settings #settings {
   height: 80%;
   padding: 40px 0;
 }
-.window-settings #settings .option {
+#window-settings #settings .option {
   width: 90%;
   margin: 0 0 30px 0;
 }
-.window-settings #footer {
+#window-settings #footer {
   height: 10%;
 }
-.window-settings #footer #start-btn {
+#window-settings #footer #start-btn {
   width: 80%;
   padding: 10px;
   border-style: none;
   border-radius: 4px;
   color: #fff6e8;
   background-color: #f20d0d;
+  transition: background-color 150ms ease-in;
 }
-.window-settings #footer #start-btn:hover {
+#window-settings #footer #start-btn:hover {
   cursor: pointer;
   background-color: #c20a0a;
+}
+
+@media screen and (max-height: 620px) {
+  #window-settings {
+    overflow: auto;
+  }
+  #window-settings #title {
+    height: 70px;
+  }
+  #window-settings #settings {
+    height: 500px;
+  }
+}
+@media screen and (max-width: 780px) {
+  #menu-open {
+    visibility: visible;
+    transition: transform 300ms ease-in;
+    z-index: 100;
+  }
+
+  #menu-open[opened] {
+    transform: translateX(-300px);
+  }
+
+  #window-settings {
+    position: absolute;
+    transform: translateX(300px);
+    width: 300px;
+    right: 0;
+    transition: transform 300ms ease-in, opacity 300ms ease-in;
+    opacity: 1;
+    z-index: 10;
+    background: #fff;
+  }
+
+  #window-settings[opened] {
+    transform: translateX(0);
+    opacity: 0.9;
+  }
+}
+@media screen and (max-width: 380px) {
+  #menu-open {
+    margin: 5px 10px;
+    padding: 6px;
+  }
+
+  #menu-open[opened] {
+    transform: translateX(-150px);
+  }
+
+  #window-settings {
+    transform: translateX(150px);
+    width: 150px;
+  }
 }
 
 /*# sourceMappingURL=style.css.map */

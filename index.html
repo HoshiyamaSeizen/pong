@@ -8,14 +8,15 @@
     <title>Pong</title>
   </head>
   <body> 
-    <div class="window-game">
+    <div id="window-game">
       <div class="score">
         <p id="score-1"> </p>
         <p id="score-2"> </p>
       </div>
       <canvas id="game" height="100" width="100"></canvas>
     </div>
-    <div class="window-settings">
+    <button id="menu-open" onClick="toggleMenu()">Menu</button>
+    <div id="window-settings">
       <div id="title">
         <h1>pong.</h1>
       </div>

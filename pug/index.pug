@@ -7,12 +7,13 @@ html(lang="en")
         link(rel="stylesheet", href="style.css")
         title Pong
     body 
-        .window-game
+        #window-game
             .score
                 p#score-1 
                 p#score-2 
             canvas#game(height=100, width=100)
-        .window-settings
+        button#menu-open(onClick="toggleMenu()") Menu
+        #window-settings
             #title
                 h1 pong.
             #settings
